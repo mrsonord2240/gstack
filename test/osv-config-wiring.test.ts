@@ -44,4 +44,11 @@ describe("osv-scanner config wiring", () => {
     // and (depending on scanner version) may be ignored.
     expect(cfg).not.toMatch(/ignoreUntil = "/);
   });
+
+  test("config does not retain suppressions that OSV now flags as unused", () => {
+    const cfg = fs.readFileSync(CONFIG, "utf-8");
+    // GHSA-frvp-7c67-39w9 was the stale Hono suppression that caused
+    // `scan / osv-scan` to fail once the dependency tree moved on.
+    expect(cfg).not.toContain('id = "GHSA-frvp-7c67-39w9"');
+  });
 });
